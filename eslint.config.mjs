@@ -2,10 +2,8 @@ import eslint from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import graphqlEslint from '@graphql-eslint/eslint-plugin';
+import importPlugin from 'eslint-plugin-import';
 import prettier from 'eslint-config-prettier';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const compat = new FlatCompat();
 
 export default [
   eslint.configs.recommended,
@@ -20,10 +18,30 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': tseslint
+      '@typescript-eslint': tseslint,
+      'import': importPlugin
     },
     rules: {
       '@typescript-eslint/no-unused-vars': 'error',
+      'import/order': ['error', {
+        'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
+        'newlines-between': 'always',
+        'alphabetize': {
+          'order': 'asc',
+          'caseInsensitive': true
+        },
+        'pathGroups': [
+          {
+            'pattern': '@nestjs/**',
+            'group': 'external',
+            'position': 'before'
+          }
+        ]
+      }],
+      'import/no-duplicates': 'error',
+      'import/no-unused-modules': 'error',
+      'import/first': 'error',
+      'import/newline-after-import': 'error'
     }
   },
   {
