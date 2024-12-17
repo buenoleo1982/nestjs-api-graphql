@@ -18,10 +18,15 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "env-cmd -f .env typeorm-ts-node-commonjs -d src/config/typeorm.config.ts",
-    "migration:generate": "npm run typeorm migration:generate",
-    "migration:run": "npm run typeorm migration:run",
-    "migration:revert": "npm run typeorm migration:revert"
+    "typeorm:oracle": "typeorm-ts-node-commonjs -d src/config/typeorm.oracle.config.ts",
+    "typeorm:postgres": "typeorm-ts-node-commonjs -d src/config/typeorm.postgres.config.ts",
+    "migration:generate:oracle": "npm run typeorm:oracle migration:generate",
+    "migration:generate:postgres": "npm run typeorm:postgres migration:generate",
+    "migration:run:oracle": "npm run typeorm:oracle migration:run",
+    "migration:run:postgres": "npm run typeorm:postgres migration:run",
+    "migration:revert:oracle": "npm run typeorm:oracle migration:revert",
+    "migration:revert:postgres": "npm run typeorm:postgres migration:revert",
+    "migration:generate": "ts-node scripts/generate-migrations.ts"
   },
   "dependencies": {
     "@nestjs/apollo": "^12.2.2",
@@ -33,6 +38,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "dotenv": "^16.4.7",
     "oracledb": "^6.7.0",
+    "pg": "^8.11.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20"

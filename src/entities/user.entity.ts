@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { UserRole } from '../enums/user-role.enum';
 
@@ -20,10 +20,10 @@ export class User {
   passhash: string;
 
   @Column({
-    type: 'varchar2',
+    type: 'varchar',
     length: 20,
     enum: UserRole,
-    default: UserRole.USER
+    default: UserRole.USER,
   })
   role: UserRole;
 

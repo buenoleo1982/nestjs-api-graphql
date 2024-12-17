@@ -1,25 +1,45 @@
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import { DatabaseModule } from './config/database.module';
-import { User } from './entities/user.entity';
-import { StatusResolver } from './graphql/schema';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+      envFilePath: '.env',
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const dbType = configService.get('DB_TYPE');
+        const dbPrefix = configService.get('DB_PREFIX');
+
+        const baseConfig = {
+          host: configService.get(`${dbPrefix}DB_HOST`),
+          port: configService.get(`${dbPrefix}DB_PORT`),
+          username: configService.get(`${dbPrefix}DB_USERNAME`),
+          password: configService.get(`${dbPrefix}DB_PASSWORD`),
+          entities: ['dist/**/*.entity.js'],
+          synchronize: false,
+          logging: true,
+        };
+
+        if (dbType === 'oracle') {
+          return {
+            ...baseConfig,
+            type: 'oracle',
+            sid: configService.get(`${dbPrefix}DB_SID`),
+          };
+        } else {
+          return {
+            ...baseConfig,
+            type: 'postgres',
+            database: configService.get(`${dbPrefix}DB_NAME`),
+          };
+        }
+      },
     }),
-    DatabaseModule,
-    TypeOrmModule.forFeature([User])
   ],
-  providers: [StatusResolver]
 })
 export class AppModule {}

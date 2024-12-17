@@ -6,9 +6,9 @@ services:
     image: postgres:17.2-alpine3.21
     restart: always
     environment:
-      POSTGRES_DB: fv-crm
-      POSTGRES_USER: allsoft
-      POSTGRES_PASSWORD: allsoft
+      POSTGRES_DB: local
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     ports:
       - '5433:5432'
     volumes:
