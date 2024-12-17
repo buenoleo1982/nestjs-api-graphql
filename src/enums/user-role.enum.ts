@@ -1,7 +1,13 @@
 /* eslint-disable no-unused-vars */
+import { registerEnumType } from '@nestjs/graphql';
+
 export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-  MANAGER = 'manager',
-  GUEST = 'guest'
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+  EDITOR = 'EDITOR',
+  MANAGER = 'MANAGER',
 }
+
+registerEnumType(UserRole, {
+  name: 'UserRole',
+});

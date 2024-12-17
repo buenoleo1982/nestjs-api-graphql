@@ -3,7 +3,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { DatabaseModule } from './config/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Module } from '@nestjs/common';
-import { StatusResolver } from './graphql/schema';
+import { StatusModule } from './graphql/status.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { StatusResolver } from './graphql/schema';
       autoSchemaFile: true,
       playground: true,
     }),
+    StatusModule,
   ],
-  providers: [StatusResolver],
 })
 export class AppModule {}
