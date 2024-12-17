@@ -1,27 +1,44 @@
-import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-import { User } from '../entities/user.entity';
-
-
-@Injectable()
-export class TypeOrmConfig {
+export class DatabaseConfig {
   static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {
-    return {
-      type: 'oracle',
-      host: configService.get('DB_HOST', 'localhost'),
-      port: configService.get('DB_PORT', 1521),
-      username: configService.get('DB_USERNAME', 'your_username'),
-      password: configService.get('DB_PASSWORD', 'your_password'),
-      sid: configService.get('DB_SID', 'your_sid'),
-      entities: [User],
+    const dbType = configService.get('DB_TYPE');
+    const dbPrefix = configService.get('DB_PREFIX');
+
+    const baseConfig = {
+      host: configService.get(`${dbPrefix}DB_HOST`),
+      port: configService.get(`${dbPrefix}DB_PORT`),
+      username: configService.get(`${dbPrefix}DB_USERNAME`),
+      password: configService.get(`${dbPrefix}DB_PASSWORD`),
+      entities: ['dist/**/*.entity.js'],
       synchronize: false,
-      logging: configService.get('NODE_ENV') === 'development',
-      maxQueryExecutionTime: 1000,
-      extra: {
-        poolSize: 5,
+      logging: true,
+    };
+
+    const dbConfigs: Record<string, TypeOrmModuleOptions> = {
+      oracle: {
+        ...baseConfig,
+        type: 'oracle',
+        sid: configService.get(`${dbPrefix}DB_SID`),
+      },
+      mssql: {
+        ...baseConfig,
+        type: 'mssql',
+        database: configService.get(`${dbPrefix}DB_NAME`),
+        port: parseInt(configService.get(`${dbPrefix}DB_PORT`)),
+        options: {
+          encrypt: false,
+          trustServerCertificate: true,
+        },
+      },
+      postgres: {
+        ...baseConfig,
+        type: 'postgres',
+        database: configService.get(`${dbPrefix}DB_NAME`),
       },
     };
+
+    return dbConfigs[dbType] || dbConfigs.postgres;
   }
 }
