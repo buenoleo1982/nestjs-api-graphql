@@ -25,18 +25,29 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           logging: true,
         };
 
-        if (dbType === 'oracle') {
-          return {
-            ...baseConfig,
-            type: 'oracle',
-            sid: configService.get(`${dbPrefix}DB_SID`),
-          };
-        } else {
-          return {
-            ...baseConfig,
-            type: 'postgres',
-            database: configService.get(`${dbPrefix}DB_NAME`),
-          };
+        switch (dbType) {
+          case 'oracle':
+            return {
+              ...baseConfig,
+              type: 'oracle',
+              sid: configService.get(`${dbPrefix}DB_SID`),
+            };
+          case 'mssql':
+            return {
+              ...baseConfig,
+              type: 'mssql',
+              database: configService.get(`${dbPrefix}DB_NAME`),
+              options: {
+                encrypt: false,
+                trustServerCertificate: true,
+              },
+            };
+          default: // postgres
+            return {
+              ...baseConfig,
+              type: 'postgres',
+              database: configService.get(`${dbPrefix}DB_NAME`),
+            };
         }
       },
     }),

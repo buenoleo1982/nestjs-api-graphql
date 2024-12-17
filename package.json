@@ -20,12 +20,16 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm:oracle": "typeorm-ts-node-commonjs -d src/config/typeorm.oracle.config.ts",
     "typeorm:postgres": "typeorm-ts-node-commonjs -d src/config/typeorm.postgres.config.ts",
+    "typeorm:mssql": "typeorm-ts-node-commonjs -d src/config/typeorm.mssql.config.ts",
     "migration:generate:oracle": "npm run typeorm:oracle migration:generate",
     "migration:generate:postgres": "npm run typeorm:postgres migration:generate",
+    "migration:generate:mssql": "npm run typeorm:mssql migration:generate",
     "migration:run:oracle": "npm run typeorm:oracle migration:run",
     "migration:run:postgres": "npm run typeorm:postgres migration:run",
+    "migration:run:mssql": "npm run typeorm:mssql migration:run",
     "migration:revert:oracle": "npm run typeorm:oracle migration:revert",
     "migration:revert:postgres": "npm run typeorm:postgres migration:revert",
+    "migration:revert:mssql": "npm run typeorm:mssql migration:revert",
     "migration:generate": "ts-node scripts/generate-migrations.ts"
   },
   "dependencies": {
@@ -37,10 +41,12 @@
     "@nestjs/platform-express": "^10.4.15",
     "@nestjs/typeorm": "^10.0.2",
     "dotenv": "^16.4.7",
+    "mssql": "^11.0.1",
     "oracledb": "^6.7.0",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "tedious": "^18.6.1",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
