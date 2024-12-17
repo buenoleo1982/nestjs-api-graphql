@@ -2864,6 +2864,10 @@ packages:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
 
+  negotiator@0.6.4:
+    resolution: {integrity: sha512-myRT3DiWPHqho5PrJaIRyaMv2kgYf0mUVgBNOYMuCH5Ki1yEiQaf/ZJuQ62nvpc44wL5WDbTX7yGJi1Neevw8w==}
+    engines: {node: '>= 0.6'}
+
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
@@ -3955,7 +3959,7 @@ snapshots:
       graphql: 16.10.0
       loglevel: 1.9.2
       lru-cache: 7.18.3
-      negotiator: 0.6.3
+      negotiator: 0.6.4
       node-abort-controller: 3.1.1
       node-fetch: 2.7.0
       uuid: 9.0.1
@@ -7276,6 +7280,8 @@ snapshots:
   natural-compare@1.4.0: {}
 
   negotiator@0.6.3: {}
+
+  negotiator@0.6.4: {}
 
   neo-async@2.6.2: {}
 
