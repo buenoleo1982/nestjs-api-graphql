@@ -1,12 +1,20 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { GraphQLModule } from '@nestjs/graphql';
 import { Module } from '@nestjs/common';
+import { StatusResolver } from './graphql/schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      playground: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -37,6 +45,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
               ...baseConfig,
               type: 'mssql',
               database: configService.get(`${dbPrefix}DB_NAME`),
+              port: parseInt(configService.get(`${dbPrefix}DB_PORT`)),
               options: {
                 encrypt: false,
                 trustServerCertificate: true,
@@ -52,5 +61,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       },
     }),
   ],
+  providers: [StatusResolver],
 })
 export class AppModule {}

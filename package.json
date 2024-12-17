@@ -27,9 +27,11 @@
     "migration:run:oracle": "npm run typeorm:oracle migration:run",
     "migration:run:postgres": "npm run typeorm:postgres migration:run",
     "migration:run:mssql": "npm run typeorm:mssql migration:run",
+    "migration:run": "npm run migration:run:oracle && npm run migration:run:postgres && npm run migration:run:mssql",
     "migration:revert:oracle": "npm run typeorm:oracle migration:revert",
     "migration:revert:postgres": "npm run typeorm:postgres migration:revert",
     "migration:revert:mssql": "npm run typeorm:mssql migration:revert",
+    "migration:revert": "npm run migration:revert:oracle && npm run migration:revert:postgres && npm run migration:revert:mssql",
     "migration:generate": "ts-node scripts/generate-migrations.ts"
   },
   "dependencies": {
@@ -40,6 +42,7 @@
     "@nestjs/graphql": "^12.2.2",
     "@nestjs/platform-express": "^10.4.15",
     "@nestjs/typeorm": "^10.0.2",
+    "apollo-server-express": "^3.13.0",
     "dotenv": "^16.4.7",
     "mssql": "^11.0.1",
     "oracledb": "^6.7.0",
