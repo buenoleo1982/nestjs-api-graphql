@@ -17,7 +17,7 @@ export class User {
   name: string;
 
   @Column({ length: 255 })
-  passhash: string;
+  password: string;
 
   @Column({
     type: 'varchar',
