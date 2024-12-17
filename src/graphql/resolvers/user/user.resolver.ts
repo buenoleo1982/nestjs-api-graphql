@@ -1,11 +1,10 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
-import { UserService } from '../services/user.service';
-import { UserType } from '../types/user.type';
-
-import { UsersResponse } from '../types/users-response.type';
-import { PageArgsInput } from '../inputs/page-args.input';
-import { UserArgsInput } from '../inputs/user-args.input';
+import { UserService } from '@graphql/services/user/user.service';
+import { UserType } from '@graphql/types/user/user.type';
+import { UsersResponse } from '@graphql/types/user/users-response.type';
+import { PageArgsInput } from '@graphql/inputs/common/page-args.input';
+import { UserArgsInput } from '@graphql/inputs/user/user-args.input';
 
 @Resolver(() => UserType)
 export class UserResolver {

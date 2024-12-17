@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Brackets } from 'typeorm';
-import { User } from '../../entities/user.entity';
-import { UsersResponse } from '../types/users-response.type';
-import { PageArgsInput } from '../inputs/page-args.input';
-import { UserArgsInput } from '../inputs/user-args.input';
+import { User } from '@entities/user.entity';
+import { UsersResponse } from '@graphql/types/user/users-response.type';
+import { PageArgsInput } from '@graphql/inputs/common/page-args.input';
+import { UserArgsInput } from '@graphql/inputs/user/user-args.input';
 
 interface FindAllArgs {
   pageArgs?: PageArgsInput;

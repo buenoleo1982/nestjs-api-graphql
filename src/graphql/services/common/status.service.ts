@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { ApiStatus } from '../types/api-status.type';
-import { DbStatus } from '../types/api-status.type';
+import { ApiStatus } from '@graphql/types/common/api-status.type';
+import { DbStatus } from '@graphql/types/common/api-status.type';
 
 @Injectable()
 export class StatusService {
