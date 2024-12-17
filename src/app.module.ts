@@ -1,19 +1,17 @@
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { StatusResolver } from './graphql/schema';
+import { DatabaseModule } from './config/database.module';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
+    DatabaseModule,
+    TypeOrmModule.forFeature([User])
   ],
-  controllers: [AppController],
-  providers: [AppService, StatusResolver],
 })
 export class AppModule {}

@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  postgres-db:
+    container_name: postgress-db
+    image: postgres:17.2-alpine3.21
+    restart: always
+    environment:
+      POSTGRES_DB: fv-crm
+      POSTGRES_USER: allsoft
+      POSTGRES_PASSWORD: allsoft
+    ports:
+      - '5433:5432'
+    volumes:
+      - 'db-data:/var/lib/postgresql/data'
+
+  oracle-db:
+    image: container-registry.oracle.com/database/free:latest
+    container_name: oracle-db
+    ports:
+      - '1521:1521'
+    environment:
+      - ORACLE_PWD=SenhaForteAqui123!
+      - ORACLE_CHARACTERSET=AL32UTF8
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    restart: unless-stopped
+
+  # app:
+  #   container_name: app
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: .
+  #     target: development
+  #   volumes:
+  #     - .:/usr/src/app
+  #   env_file:
+  #   - .env
+  #   command: npm run start:dev
+  #   ports:
+  #     - 4000:4000
+  #   depends_on:
+  #     - db
+
+volumes:
+  db-data:
+    driver: local
+  oracle-data:
+    driver: local
