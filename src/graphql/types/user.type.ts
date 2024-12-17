@@ -19,22 +19,22 @@ export class UserType {
   @Field(() => UserRole)
   role: UserRole;
 
-  @Field()
+  @Field({ name: 'createdAt' })
   created_at: Date;
 
-  @Field()
+  @Field({ name: 'updatedAt' })
   updated_at: Date;
 
-  @Field({ nullable: true })
+  @Field({ name: 'deletedAt', nullable: true })
   deleted_at: Date;
 
   @Field()
   status: boolean;
 
-  @Field()
+  @Field({ name: 'lastLogin' })
   last_login: Date;
 
-  @Field()
+  @Field({ name: 'lastLoginIp' })
   last_login_ip: string;
 
   @Field()

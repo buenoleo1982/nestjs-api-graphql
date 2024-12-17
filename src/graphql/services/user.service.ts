@@ -1,8 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Brackets } from 'typeorm';
 import { User } from '../../entities/user.entity';
-import { UserType } from '../types/user.type';
+import { UsersResponse } from '../types/users-response.type';
+import { PageArgsInput } from '../inputs/page-args.input';
+import { UserArgsInput } from '../inputs/user-args.input';
+
+interface FindAllArgs {
+  pageArgs?: PageArgsInput;
+  filterArgs?: UserArgsInput;
+}
 
 @Injectable()
 export class UserService {
@@ -11,49 +18,58 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<UserType[]> {
-    const users = await this.userRepository.find({
-      where: {
-        status: true,
-        visibility: true,
-      },
-      order: {
-        created_at: 'DESC',
-      },
-    });
+  async findAll({
+    pageArgs,
+    filterArgs,
+  }: FindAllArgs = {}): Promise<UsersResponse> {
+    const { skip = 0, take = 10 } = pageArgs || {};
+    const { email, username } = filterArgs || {};
 
-    // Os campos entre entity e type são compatíveis, então podemos retornar diretamente
-    return users;
-  }
+    // Corrigindo a query para usar "users" ao invés de "user"
+    const queryBuilder = this.userRepository
+      .createQueryBuilder('users')
+      .where('users.deleted_at IS NULL')
+      .andWhere('users.visibility = :visibility', { visibility: true });
 
-  async findById(id: number): Promise<UserType> {
-    const user = await this.userRepository.findOne({
-      where: {
-        id,
-        status: true,
-        visibility: true,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
+    // Adicionando condições OR para os filtros
+    if (email || username) {
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          if (email) {
+            qb.orWhere('users.email ILIKE :email', { email: `%${email}%` });
+          }
+          if (username) {
+            qb.orWhere('users.username ILIKE :username', {
+              username: `%${username}%`,
+            });
+          }
+        }),
+      );
     }
 
-    return user;
-  }
+    // Executando a query principal e a contagem total
+    const [users, totalCount] = await Promise.all([
+      queryBuilder
+        .skip(skip)
+        .take(take + 1)
+        .getMany(),
+      queryBuilder.getCount(),
+    ]);
 
-  async findAllPaginated(
-    skip: number,
-    take: number,
-  ): Promise<[UserType[], number]> {
-    return this.userRepository.findAndCount({
-      where: {
-        status: true,
-        visibility: true,
+    // Verificando se há mais resultados
+    const hasMore = users.length > take;
+    if (hasMore) {
+      users.pop();
+    }
+
+    return {
+      nodes: users,
+      pagination: {
+        totalCount,
+        page: Math.floor(skip / take) + 1,
+        pageSize: take,
+        hasMore,
       },
-      order: { created_at: 'DESC' },
-      skip,
-      take,
-    });
+    };
   }
 }
