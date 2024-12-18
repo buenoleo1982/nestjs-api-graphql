@@ -32,7 +32,8 @@
     "migration:revert:postgres": "npm run typeorm:postgres migration:revert",
     "migration:revert:mssql": "npm run typeorm:mssql migration:revert",
     "migration:revert": "npm run migration:revert:oracle && npm run migration:revert:postgres && npm run migration:revert:mssql",
-    "migration:generate": "ts-node scripts/generate-migrations.ts"
+    "migration:generate": "ts-node scripts/generate-migrations.ts",
+    "create:module": "bash scripts/create-module.sh"
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",

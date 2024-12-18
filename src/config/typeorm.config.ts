@@ -1,8 +1,7 @@
 import * as process from 'process';
 
 import { DataSource } from 'typeorm';
-
-import { User } from '../entities/user.entity';
+import { User } from '@/graphql/modules/users/entities/user.entity';
 
 export default new DataSource({
   type: 'oracle',

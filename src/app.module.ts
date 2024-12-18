@@ -5,8 +5,8 @@ import { DatabaseModule } from './config/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Logger } from './logger/logger.service';
 import { Module } from '@nestjs/common';
-import { StatusModule } from './graphql/status.module';
-import { UserModule } from './graphql/user.module';
+import { StatusModule } from './graphql/modules/status/status.module';
+import { UserModule } from './graphql/modules/users/user.module';
 
 @Module({
   imports: [

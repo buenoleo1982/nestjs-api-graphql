@@ -1,8 +1,8 @@
 import { Query, Resolver } from '@nestjs/graphql';
 
-import { ApiStatus } from '@graphql/types/common/api-status.type';
+import { ApiStatus } from '@/graphql/modules/status/types/status.type';
 import { Logger } from '@/logger/logger.service';
-import { StatusService } from '@graphql/services/common/status.service';
+import { StatusService } from '@/graphql/modules/status/services/status.service';
 
 @Resolver()
 export class StatusResolver {

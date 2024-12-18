@@ -19,8 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["src/*"],
-      "@graphql/*": ["src/graphql/*"],
-      "@entities/*": ["src/entities/*"]
+      "@graphql/*": ["src/graphql/*"]
     }
   }
 }
