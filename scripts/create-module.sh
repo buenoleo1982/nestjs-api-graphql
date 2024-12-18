@@ -10,6 +10,14 @@ fi
 # Converte o nome do módulo para lowercase
 MODULE_NAME=$(echo $1 | tr '[:upper:]' '[:lower:]')
 
+# Função para capitalizar primeira letra
+capitalize() {
+    echo "$(tr '[:lower:]' '[:upper:]' <<< ${1:0:1})${1:1}"
+}
+
+# Armazena o nome capitalizado em uma variável
+MODULE_NAME_CAPITAL=$(capitalize $MODULE_NAME)
+
 # Define o diretório base
 BASE_DIR="src/graphql/modules/$MODULE_NAME"
 
@@ -30,7 +38,7 @@ cat > "$BASE_DIR/types/$MODULE_NAME.type.ts" << EOF
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @ObjectType()
-export class ${MODULE_NAME^} {
+export class $MODULE_NAME_CAPITAL {
   @Field(() => ID)
   id: number;
 }
@@ -40,7 +48,7 @@ cat > "$BASE_DIR/types/$MODULE_NAME.input.ts" << EOF
 import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class Create${MODULE_NAME^}Input {
+export class Create${MODULE_NAME_CAPITAL}Input {
 }
 EOF
 
@@ -48,7 +56,7 @@ cat > "$BASE_DIR/entities/$MODULE_NAME.entity.ts" << EOF
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class ${MODULE_NAME^} {
+export class $MODULE_NAME_CAPITAL {
   @PrimaryGeneratedColumn()
   id: number;
 }
@@ -56,15 +64,15 @@ EOF
 
 cat > "$BASE_DIR/resolvers/$MODULE_NAME.resolver.ts" << EOF
 import { Resolver, Query } from '@nestjs/graphql';
-import { ${MODULE_NAME^} } from '../types/$MODULE_NAME.type';
-import { ${MODULE_NAME^}Service } from '../services/$MODULE_NAME.service';
+import { $MODULE_NAME_CAPITAL } from '../types/$MODULE_NAME.type';
+import { ${MODULE_NAME_CAPITAL}Service } from '../services/$MODULE_NAME.service';
 
-@Resolver(() => ${MODULE_NAME^})
-export class ${MODULE_NAME^}Resolver {
-  constructor(private readonly ${MODULE_NAME}Service: ${MODULE_NAME^}Service) {}
+@Resolver(() => $MODULE_NAME_CAPITAL)
+export class ${MODULE_NAME_CAPITAL}Resolver {
+  constructor(private readonly ${MODULE_NAME}Service: ${MODULE_NAME_CAPITAL}Service) {}
 
-  @Query(() => [${MODULE_NAME^}])
-  async ${MODULE_NAME}s(): Promise<${MODULE_NAME^}[]> {
+  @Query(() => [$MODULE_NAME_CAPITAL])
+  async ${MODULE_NAME}s(): Promise<${MODULE_NAME_CAPITAL}[]> {
     return this.${MODULE_NAME}Service.findAll();
   }
 }
@@ -74,16 +82,16 @@ cat > "$BASE_DIR/services/$MODULE_NAME.service.ts" << EOF
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ${MODULE_NAME^} } from '../entities/$MODULE_NAME.entity';
+import { $MODULE_NAME_CAPITAL } from '../entities/$MODULE_NAME.entity';
 
 @Injectable()
-export class ${MODULE_NAME^}Service {
+export class ${MODULE_NAME_CAPITAL}Service {
   constructor(
-    @InjectRepository(${MODULE_NAME^})
-    private readonly ${MODULE_NAME}Repository: Repository<${MODULE_NAME^}>,
+    @InjectRepository($MODULE_NAME_CAPITAL)
+    private readonly ${MODULE_NAME}Repository: Repository<$MODULE_NAME_CAPITAL>,
   ) {}
 
-  async findAll(): Promise<${MODULE_NAME^}[]> {
+  async findAll(): Promise<${MODULE_NAME_CAPITAL}[]> {
     return this.${MODULE_NAME}Repository.find();
   }
 }
@@ -92,16 +100,16 @@ EOF
 cat > "$BASE_DIR/$MODULE_NAME.module.ts" << EOF
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ${MODULE_NAME^} } from './entities/$MODULE_NAME.entity';
-import { ${MODULE_NAME^}Resolver } from './resolvers/$MODULE_NAME.resolver';
-import { ${MODULE_NAME^}Service } from './services/$MODULE_NAME.service';
+import { $MODULE_NAME_CAPITAL } from './entities/$MODULE_NAME.entity';
+import { ${MODULE_NAME_CAPITAL}Resolver } from './resolvers/$MODULE_NAME.resolver';
+import { ${MODULE_NAME_CAPITAL}Service } from './services/$MODULE_NAME.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([${MODULE_NAME^}])],
-  providers: [${MODULE_NAME^}Resolver, ${MODULE_NAME^}Service],
-  exports: [${MODULE_NAME^}Service],
+  imports: [TypeOrmModule.forFeature([$MODULE_NAME_CAPITAL])],
+  providers: [${MODULE_NAME_CAPITAL}Resolver, ${MODULE_NAME_CAPITAL}Service],
+  exports: [${MODULE_NAME_CAPITAL}Service],
 })
-export class ${MODULE_NAME^}Module {}
+export class ${MODULE_NAME_CAPITAL}Module {}
 EOF
 
 echo "Módulo $MODULE_NAME criado com sucesso!"

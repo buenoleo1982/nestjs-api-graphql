@@ -2,5 +2,14 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always",
     "source.fixAll.stylelint": "always"
+  },
+  "material-icon-theme.files.associations": {
+    "*.type.ts": "nest-middleware",
+    "*.input.ts": "nest-controller",
+    "*.args.ts": "nest-decorator",
+    "*.entity.ts": "nest-pipe",
+    "*.resolver.ts": "graphql",
+    "*.service.ts": "nest-service",
+    "*.module.ts": "nest-module"
   }
 }
