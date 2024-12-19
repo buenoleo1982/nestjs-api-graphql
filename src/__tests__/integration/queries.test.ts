@@ -1,10 +1,8 @@
 import * as dotenv from 'dotenv';
 import * as request from 'supertest';
 
-import { Test, TestingModule } from '@nestjs/testing';
-
-import { AppModule } from '../../app.module';
 import { INestApplication } from '@nestjs/common';
+import { mockLogs } from '../utils/mock-logs.util';
 
 // Carrega as variáveis de ambiente do .env
 dotenv.config();
@@ -13,12 +11,11 @@ describe('Queries de integração', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+    // Desabilita todos os logs do console
+    mockLogs.setupConsoleMocks();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    // Cria e configura a aplicação de teste
+    app = await mockLogs.createTestingApp();
   });
 
   afterAll(async () => {
