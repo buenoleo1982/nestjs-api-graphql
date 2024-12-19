@@ -5,6 +5,8 @@ import { User } from '@/graphql/modules/users/entities/user.entity';
 import { UsersResponse } from '@/graphql/modules/users/types/users-response.type';
 import { PageArgsInput } from '@/graphql/modules/common/types/page-args.input';
 import { UserArgsInput } from '@/graphql/modules/users/types/user-args.input';
+import { CreateUserInput } from '../types/create-user.input';
+import * as argon2 from 'argon2';
 
 interface FindAllArgs {
   pageArgs?: PageArgsInput;
@@ -25,13 +27,11 @@ export class UserService {
     const { skip = 0, take = 10 } = pageArgs || {};
     const { email, username } = filterArgs || {};
 
-    // Corrigindo a query para usar "users" ao invés de "user"
     const queryBuilder = this.userRepository
       .createQueryBuilder('users')
       .where('users.deleted_at IS NULL')
       .andWhere('users.visibility = :visibility', { visibility: true });
 
-    // Adicionando condições OR para os filtros
     if (email || username) {
       queryBuilder.andWhere(
         new Brackets((qb) => {
@@ -47,7 +47,6 @@ export class UserService {
       );
     }
 
-    // Executando a query principal e a contagem total
     const [users, totalCount] = await Promise.all([
       queryBuilder
         .skip(skip)
@@ -56,7 +55,6 @@ export class UserService {
       queryBuilder.getCount(),
     ]);
 
-    // Verificando se há mais resultados
     const hasMore = users.length > take;
     if (hasMore) {
       users.pop();
@@ -71,5 +69,28 @@ export class UserService {
         hasMore,
       },
     };
+  }
+
+  async create(data: CreateUserInput): Promise<User> {
+    const user = this.userRepository.create({
+      ...data,
+      password: await argon2.hash(data.password, {
+        type: argon2.argon2id,
+        memoryCost: 2 ** 16, // 64MB
+        timeCost: 3,
+        parallelism: 1,
+      }),
+      created_at: new Date(),
+      updated_at: new Date(),
+      last_login: null,
+      last_login_ip: null,
+      deleted_at: null,
+    });
+
+    return this.userRepository.save(user);
+  }
+
+  async verifyPassword(hash: string, plain: string): Promise<boolean> {
+    return argon2.verify(hash, plain);
   }
 }

@@ -31,10 +31,10 @@ export class UserType {
   @Field()
   status: boolean;
 
-  @Field({ name: 'lastLogin' })
+  @Field({ name: 'lastLogin', nullable: true })
   last_login: Date;
 
-  @Field({ name: 'lastLoginIp' })
+  @Field({ name: 'lastLoginIp', nullable: true })
   last_login_ip: string;
 
   @Field()

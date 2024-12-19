@@ -1,7 +1,22 @@
+import * as path from 'path';
 import * as process from 'process';
+import * as tsConfigPaths from 'tsconfig-paths';
 
 import { DataSource } from 'typeorm';
 import { User } from '@/graphql/modules/users/entities/user.entity';
+
+// Registra os paths do tsconfig
+const tsConfig = require('../../tsconfig.json');
+const baseUrl = path.join(
+  process.cwd(),
+  tsConfig.compilerOptions.baseUrl || './',
+);
+
+tsConfigPaths.register({
+  baseUrl,
+  paths: tsConfig.compilerOptions.paths,
+});
+
 
 export default new DataSource({
   type: 'oracle',

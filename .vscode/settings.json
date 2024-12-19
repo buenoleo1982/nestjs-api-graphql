@@ -4,13 +4,14 @@
     "source.fixAll.stylelint": "always"
   },
   "material-icon-theme.files.associations": {
-    "*.type.ts": "nest-middleware",
-    "*.input.ts": "nest-controller",
+    "*.type.ts": "graphql",
+    "*.input.ts": "graphql",
     "*.args.ts": "nest-decorator",
     "*.entity.ts": "nest-pipe",
-    "*.resolver.ts": "graphql",
+    "*.resolver.ts": "nest-controller",
     "*.service.ts": "nest-service",
-    "*.module.ts": "nest-module"
+    "*.module.ts": "nest-module",
+    "*.use-case.ts": "nest-gateway"
   },
   "files.associations": {
     "*.ts": "typescript",

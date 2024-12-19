@@ -1,17 +1,17 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
-
-import { UserService } from '@graphql/modules/users/services/user.service';
-import { UserType } from '@/graphql/modules/users/types/user.type';
-import { UsersResponse } from '@/graphql/modules/users/types/users-response.type';
+import { Args, Query, Resolver, Mutation } from '@nestjs/graphql';
+import { UserType } from '../types/user.type';
+import { UsersResponse } from '../types/users-response.type';
 import { PageArgsInput } from '@/graphql/modules/common/types/page-args.input';
-import { UserArgsInput } from '@/graphql/modules/users/types/user-args.input';
-import { Logger } from '@/logger/logger.service';
+import { UserArgsInput } from '../types/user-args.input';
+import { CreateUserInput } from '../types/create-user.input';
+import { CreateUserUseCase } from '../use-cases/create-user.use-case';
+import { GetUsersUseCase } from '../use-cases/get-users.use-case';
 
 @Resolver(() => UserType)
 export class UserResolver {
   constructor(
-    private userService: UserService,
-    private readonly logger: Logger,
+    private createUserUseCase: CreateUserUseCase,
+    private getUsersUseCase: GetUsersUseCase,
   ) {}
 
   @Query(() => UsersResponse)
@@ -19,12 +19,11 @@ export class UserResolver {
     @Args('pageArgs', { nullable: true }) pageArgs?: PageArgsInput,
     @Args('filterArgs', { nullable: true }) filterArgs?: UserArgsInput,
   ): Promise<UsersResponse> {
-    this.logger.log('Iniciando busca de usuários', 'UserResolver');
-    this.logger.debug(
-      `Parâmetros recebidos - pageArgs: ${JSON.stringify(pageArgs)}, filterArgs: ${JSON.stringify(filterArgs)}`,
-      'UserResolver',
-    );
+    return this.getUsersUseCase.execute(pageArgs, filterArgs);
+  }
 
-    return this.userService.findAll({ pageArgs, filterArgs });
+  @Mutation(() => UserType)
+  async createUser(@Args('data') data: CreateUserInput): Promise<UserType> {
+    return this.createUserUseCase.execute(data);
   }
 }

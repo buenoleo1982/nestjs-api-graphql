@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+import { IsEnum } from 'class-validator';
 import { UserRole } from '@/enums/user-role.enum';
 
 @Entity('users')
@@ -22,9 +23,13 @@ export class User {
   @Column({
     type: 'varchar',
     length: 20,
-    enum: UserRole,
     default: UserRole.USER,
+    transformer: {
+      to: (value: UserRole) => value,
+      from: (value: string) => value as UserRole,
+    },
   })
+  @IsEnum(UserRole)
   role: UserRole;
 
   @Column()
@@ -33,16 +38,16 @@ export class User {
   @Column()
   updated_at: Date;
 
-  @Column()
+  @Column({ nullable: true })
   deleted_at: Date;
 
   @Column({ default: true })
   status: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   last_login: Date;
 
-  @Column()
+  @Column({ nullable: true })
   last_login_ip: string;
 
   @Column({ default: true })
