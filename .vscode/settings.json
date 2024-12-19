@@ -11,5 +11,19 @@
     "*.resolver.ts": "graphql",
     "*.service.ts": "nest-service",
     "*.module.ts": "nest-module"
+  },
+  "files.associations": {
+    "*.ts": "typescript",
+    "*.service.ts": "typescript",
+    "*.module.ts": "typescript",
+    "*.controller.ts": "typescript",
+    "*.resolver.ts": "typescript",
+    "*.entity.ts": "typescript",
+    "*.input.ts": "typescript",
+    "*.args.ts": "typescript",
+    "*.type.ts": "typescript",
+    "*.pipe.ts": "typescript",
+    "*.decorator.ts": "typescript",
+    "*.middleware.ts": "typescript"
   }
 }
